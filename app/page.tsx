@@ -8,6 +8,8 @@ import { TaskListView } from '@/components/list/TaskListView';
 import { AnalyticsDashboard } from '@/components/dashboard/AnalyticsDashboard';
 import { ProjectsView } from '@/components/projects/ProjectsView';
 import { TeamView } from '@/components/team/TeamView';
+import { ActivityView } from '@/components/activity/ActivityView';
+import { SettingsView } from '@/components/settings/SettingsView';
 import { FilterToolbar } from '@/components/filters/FilterToolbar';
 import { TaskDetailModal } from '@/components/tasks/TaskDetailModal';
 import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
@@ -28,6 +30,8 @@ export default function HomePage() {
         {activeView === 'dashboard' && <AnalyticsDashboard />}
         {activeView === 'projects' && <ProjectsView />}
         {activeView === 'team' && <TeamView />}
+        {activeView === 'activity' && <ActivityView />}
+        {activeView === 'settings' && <SettingsView />}
       </div>
 
       {/* Global Modals & Slide-overs */}

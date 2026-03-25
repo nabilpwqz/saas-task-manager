@@ -11,6 +11,8 @@ import {
   Sparkles,
   Command,
   HelpCircle,
+  History,
+  Settings,
 } from 'lucide-react';
 import { useAppStore } from '@/lib/store';
 import { Avatar } from '@/components/ui/Avatar';
@@ -28,6 +30,7 @@ export function Sidebar() {
     openCreateProjectModal,
     openShortcutsModal,
     tasks,
+    activities,
   } = useAppStore();
 
   const currentUser = users[0];
@@ -38,6 +41,8 @@ export function Sidebar() {
     { id: 'dashboard', label: 'Analytics Hub', icon: LayoutDashboard },
     { id: 'projects', label: 'Projects', icon: FolderKanban, count: projects.length },
     { id: 'team', label: 'Team Members', icon: Users2, count: workspace.members.length },
+    { id: 'activity', label: 'Audit Trail', icon: History, count: activities.length },
+    { id: 'settings', label: 'Settings', icon: Settings },
   ] as const;
 
   return (

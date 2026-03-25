@@ -37,6 +37,8 @@ export function Header() {
     dashboard: 'Analytics Overview',
     projects: 'Projects Hub',
     team: 'Team Directory',
+    activity: 'Audit Trail',
+    settings: 'Workspace Settings',
   };
 
   return (

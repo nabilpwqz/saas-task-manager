@@ -2,7 +2,16 @@ import { create } from 'zustand';
 import { MOCK_ACTIVITIES, MOCK_PROJECTS, MOCK_TASKS, MOCK_USERS, MOCK_WORKSPACE } from './mock-data';
 import { ActivityItem, ChecklistItem, Project, Task, TaskComment, TaskPriority, TaskStatus, User, Workspace } from '@/types';
 
-export type AppViewMode = 'board' | 'list' | 'dashboard' | 'projects' | 'team';
+export type AppViewMode = 'board' | 'list' | 'dashboard' | 'projects' | 'team' | 'activity' | 'settings';
+
+export interface ApiKeyItem {
+  id: string;
+  name: string;
+  key: string;
+  createdAt: string;
+  lastUsed: string;
+  scopes: string[];
+}
 
 interface AppState {
   // Theme
@@ -15,6 +24,7 @@ interface AppState {
   projects: Project[];
   tasks: Task[];
   activities: ActivityItem[];
+  apiKeys: ApiKeyItem[];
 
   // Navigation & Filtering
   activeView: AppViewMode;
@@ -72,6 +82,9 @@ interface AppState {
 
   // Workspace Mutators
   inviteMember: (email: string, role: string) => void;
+  updateWorkspace: (updates: Partial<Workspace>) => void;
+  addApiKey: (name: string, scopes: string[]) => void;
+  revokeApiKey: (id: string) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -83,6 +96,24 @@ export const useAppStore = create<AppState>((set, get) => ({
   projects: MOCK_PROJECTS,
   tasks: MOCK_TASKS,
   activities: MOCK_ACTIVITIES,
+  apiKeys: [
+    {
+      id: 'key-1',
+      name: 'Production Ingestion Service',
+      key: 'fc_live_9a7d32c8e104f5b721894a',
+      createdAt: '2026-03-20T10:00:00Z',
+      lastUsed: '2 hours ago',
+      scopes: ['read:tasks', 'write:tasks'],
+    },
+    {
+      id: 'key-2',
+      name: 'GitHub PR Integration',
+      key: 'fc_live_3b811ef902c448a071569d',
+      createdAt: '2026-04-05T14:30:00Z',
+      lastUsed: '1 day ago',
+      scopes: ['read:tasks', 'write:comments'],
+    },
+  ],
 
   activeView: 'board',
   setActiveView: (view) => set({ activeView: view }),
@@ -322,4 +353,22 @@ export const useAppStore = create<AppState>((set, get) => ({
       isInviteModalOpen: false,
     }));
   },
+
+  updateWorkspace: (updates) =>
+    set((state) => ({ workspace: { ...state.workspace, ...updates } })),
+
+  addApiKey: (name, scopes) => {
+    const newKey: ApiKeyItem = {
+      id: `key-${Date.now()}`,
+      name,
+      key: `fc_live_${Math.random().toString(36).substring(2, 10)}${Math.random().toString(36).substring(2, 10)}`,
+      createdAt: new Date().toISOString(),
+      lastUsed: 'Never',
+      scopes,
+    };
+    set((state) => ({ apiKeys: [newKey, ...state.apiKeys] }));
+  },
+
+  revokeApiKey: (id) =>
+    set((state) => ({ apiKeys: state.apiKeys.filter((k) => k.id !== id) })),
 }));
