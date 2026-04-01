@@ -6,7 +6,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 
 interface AppShellProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export function AppShell({ children }: AppShellProps) {

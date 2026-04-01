@@ -16,7 +16,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { BOARD_COLUMNS, STATUS_CONFIG } from '@/lib/constants';
-import { TaskPriority, TaskStatus } from '@/types';
+import { ChecklistItem, Task, TaskPriority, TaskStatus, User } from '@/types';
 import { formatDate, isOverdue } from '@/lib/utils';
 import { TaskComments } from './TaskComments';
 
@@ -37,10 +37,10 @@ export function TaskDetailModal() {
   const [newChecklistText, setNewChecklistText] = useState('');
 
   if (!selectedTaskId) return null;
-  const task = tasks.find((t) => t.id === selectedTaskId);
+  const task = tasks.find((t: Task) => t.id === selectedTaskId);
   if (!task) return null;
 
-  const completedChecklists = task.checklists.filter((c) => c.completed).length;
+  const completedChecklists = task.checklists.filter((c: ChecklistItem) => c.completed).length;
   const checklistPercentage =
     task.checklists.length > 0
       ? Math.round((completedChecklists / task.checklists.length) * 100)
@@ -101,7 +101,9 @@ export function TaskDetailModal() {
             <textarea
               rows={2}
               value={task.title}
-              onChange={(e) => updateTask(task.id, { title: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                updateTask(task.id, { title: e.target.value })
+              }
               className="w-full text-lg font-bold text-slate-900 dark:text-white bg-transparent border-none resize-none focus:outline-none focus:ring-0 p-0"
               placeholder="Task title..."
             />
@@ -116,7 +118,7 @@ export function TaskDetailModal() {
               </label>
               <select
                 value={task.status}
-                onChange={(e) =>
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   moveTaskStatus(task.id, e.target.value as TaskStatus)
                 }
                 className="w-full h-8 px-2 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-medium cursor-pointer"
@@ -136,7 +138,7 @@ export function TaskDetailModal() {
               </label>
               <select
                 value={task.priority}
-                onChange={(e) =>
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   updateTask(task.id, { priority: e.target.value as TaskPriority })
                 }
                 className="w-full h-8 px-2 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-medium cursor-pointer"
@@ -155,8 +157,8 @@ export function TaskDetailModal() {
               </label>
               <select
                 value={task.assigneeId || ''}
-                onChange={(e) => {
-                  const newAssignee = users.find((u) => u.id === e.target.value);
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  const newAssignee = users.find((u: User) => u.id === e.target.value);
                   updateTask(task.id, {
                     assigneeId: e.target.value,
                     assignee: newAssignee,
@@ -165,7 +167,7 @@ export function TaskDetailModal() {
                 className="w-full h-8 px-2 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-medium cursor-pointer"
               >
                 <option value="">Unassigned</option>
-                {users.map((u) => (
+                {users.map((u: User) => (
                   <option key={u.id} value={u.id}>
                     {u.name}
                   </option>
@@ -181,7 +183,7 @@ export function TaskDetailModal() {
               <input
                 type="date"
                 value={task.dueDate ? task.dueDate.split('T')[0] : ''}
-                onChange={(e) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   updateTask(task.id, { dueDate: e.target.value || undefined })
                 }
                 className="w-full h-8 px-2 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 font-medium cursor-pointer"
@@ -197,7 +199,9 @@ export function TaskDetailModal() {
             <textarea
               rows={4}
               value={task.description || ''}
-              onChange={(e) => updateTask(task.id, { description: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                updateTask(task.id, { description: e.target.value })
+              }
               placeholder="Add detailed markdown description..."
               className="w-full p-3 text-xs rounded-xl bg-slate-50 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-500"
             />
@@ -230,7 +234,7 @@ export function TaskDetailModal() {
 
             {/* Checklist items list */}
             <div className="space-y-1.5 pt-1">
-              {task.checklists.map((cl) => (
+              {task.checklists.map((cl: ChecklistItem) => (
                 <div
                   key={cl.id}
                   onClick={() => toggleChecklistItem(task.id, cl.id)}
@@ -260,7 +264,9 @@ export function TaskDetailModal() {
               <input
                 type="text"
                 value={newChecklistText}
-                onChange={(e) => setNewChecklistText(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setNewChecklistText(e.target.value)
+                }
                 placeholder="Add checklist item..."
                 className="flex-1 h-8 px-3 text-xs rounded-lg bg-slate-100 dark:bg-slate-800 border-none text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-1 focus:ring-brand-500"
               />
