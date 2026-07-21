@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/Button';
 import { BOARD_COLUMNS, STATUS_CONFIG } from '@/lib/constants';
 import { TaskPriority, TaskStatus } from '@/types';
 import { formatDate, isOverdue } from '@/lib/utils';
+import { TaskComments } from './TaskComments';
 
 export function TaskDetailModal() {
   const {
@@ -268,6 +269,9 @@ export function TaskDetailModal() {
               </Button>
             </form>
           </div>
+
+          {/* Discussion & Activity Section */}
+          <TaskComments task={task} />
         </div>
       </div>
     </div>
