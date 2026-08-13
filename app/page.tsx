@@ -3,20 +3,37 @@
 import React from 'react';
 import { AppShell } from '@/components/layout/AppShell';
 import { useAppStore } from '@/lib/store';
+import { KanbanBoard } from '@/components/board/KanbanBoard';
+import { TaskListView } from '@/components/list/TaskListView';
+import { AnalyticsDashboard } from '@/components/dashboard/AnalyticsDashboard';
+import { ProjectsView } from '@/components/projects/ProjectsView';
+import { TeamView } from '@/components/team/TeamView';
+import { FilterToolbar } from '@/components/filters/FilterToolbar';
+import { TaskDetailModal } from '@/components/tasks/TaskDetailModal';
+import { CreateTaskModal } from '@/components/tasks/CreateTaskModal';
+import { ShortcutsModal } from '@/components/tasks/ShortcutsModal';
 
 export default function HomePage() {
   const { activeView } = useAppStore();
 
   return (
     <AppShell>
-      <div className="p-8">
-        <h2 className="text-xl font-bold text-slate-900 dark:text-white mb-2">
-          FlowCraft SaaS Workspace
-        </h2>
-        <p className="text-sm text-slate-500">
-          Current view mode: <span className="font-semibold text-brand-500">{activeView}</span>
-        </p>
+      {/* Show filtering toolbar when on board or list view */}
+      {(activeView === 'board' || activeView === 'list') && <FilterToolbar />}
+
+      {/* Main Content Area based on Active View */}
+      <div className="h-[calc(100vh-8rem)] overflow-y-auto">
+        {activeView === 'board' && <KanbanBoard />}
+        {activeView === 'list' && <TaskListView />}
+        {activeView === 'dashboard' && <AnalyticsDashboard />}
+        {activeView === 'projects' && <ProjectsView />}
+        {activeView === 'team' && <TeamView />}
       </div>
+
+      {/* Global Modals & Slide-overs */}
+      <TaskDetailModal />
+      <CreateTaskModal />
+      <ShortcutsModal />
     </AppShell>
   );
 }
